@@ -22,8 +22,8 @@ Baud rate is fixed to 31250.
 
 # Roadmap
 
-☑️ Improve the parser to support more types of MIDI messages
-☑️ Add support for selecting the serial port and baud rate via arguments
+☑️ Improve the parser to support more types of MIDI messages  
+☑️ Add support for selecting the serial port and baud rate via arguments  
 
 -----
 
