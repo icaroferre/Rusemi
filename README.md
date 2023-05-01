@@ -8,7 +8,7 @@ Rusemi can be used as a replacement for other USB Serial to MIDI convertes such 
 
 1 - Download the latest compiled version from the Releases page or clone the repo and compile it (```cargo build```)
 2 - Run the compiled binary via the terminal
-3 - Select which serial port you'd like to use
+3 - Select which serial port you'd like to use, and specify baud rate: ```./rusemi 38400``` (Defaults to 32500, the MIDI baud rate)
 4 - Messages received from the serial port (incoming messages) will be parsed, printed to the terminal and forwarded to the "from Rusemi" virtual MIDI port. 
 5 - Messages sent to the "to Rusemi" virtual MIDI port (outgoing messages) will be forwarded to the serial port.
 
@@ -18,12 +18,10 @@ Rusemi only works on macOS (since it uses CoreMIDI).
 
 Rusemi currenctly can only parse MIDI notes and control messages received from the USB serial port (messages sent to the serial port don't require parsing and therefore it can handle every MIDI message).
 
-Baud rate is fixed to 31250.
-
 # Roadmap
 
 ☑️ Improve the parser to support more types of MIDI messages  
-☑️ Add support for selecting the serial port and baud rate via arguments  
+☑️ Add support for selecting the serial port via arguments  
 
 -----
 
