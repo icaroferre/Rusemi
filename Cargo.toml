@@ -11,5 +11,5 @@ repository="https://github.com/icaroferre/rusemi"
 
 [dependencies]
 serialport = "4.0.1"
-coremidi = "^0.6.0"
+coremidi = "0.8.0"
 chrono = "0.4.19"
