@@ -17,13 +17,40 @@ extern crate coremidi;
 extern crate chrono;
 use std::sync::mpsc;
 use chrono::Local;
+use std::env;
 
 fn main() {
     println!("\nRUSEMI - Rust USB Serial to MIDI CLI\nDeveloped by Icaro Ferre");    
-    
+    println!("\nUsage: rusemi [baud_rate]\n");
+
+    // Get command line arguments
+    let args: Vec<String> = env::args().collect();
+
+    if args.len() > 2 {
+        println!("Too many arguments!");
+        ::std::process::exit(1);
+    }
+
+    if args.len() == 2 {
+        if args[1].parse::<u32>().is_err() {
+            println!("Invalid baud rate!");
+            ::std::process::exit(1);
+        }
+        println!("Using baud rate: {}", args[1]);
+    }
+
+    if args.len() == 1 {
+        println!("No baud rate specified. Using default value of 32500.");
+    }
+
     // Initialize serial port
     let port_name = get_serial_port();
-    let baud_rate = 31250;
+    let baud_rate: u32 = if args.len() >= 2 {
+        args[1].parse().unwrap_or(32500)
+    } else {
+        32500 
+    };
+
 
     println!("Opening port: {}", port_name);
     let port = serialport::new(port_name.clone(), baud_rate)
@@ -65,7 +92,16 @@ fn main() {
                         let serial_owned = serial_buf.to_owned();
                         // The first byte indicates the type of the MIDI message (Note / CC / etc)
                         let cmd = serial_owned[0];
+                        println!("Received: {:?}", serial_owned);
                         match cmd {
+                            // Handle 128 through 143 as note off messages
+                            128..=143 => {
+                                let pitch = serial_owned[1];
+                                let vel = serial_owned[2];
+                                let note = create_note_off(cmd - 128, pitch, vel);
+                                output_port.received(&note).unwrap();
+                            }
+
                             // MIDI NOTES
                             144..=159 => {
                                 let pitch = serial_owned[1];
